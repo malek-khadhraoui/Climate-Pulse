@@ -69,7 +69,7 @@ The goal is to provide a dynamic exploration tool that demonstrates professional
 ## 🎥 Project Demonstration
 Check out the interactive dashboard in action:  
 
-**▶️ [Climate Pulse: Dashboard Walkthrough]**
+**▶️ [[Climate Pulse: Dashboard Walkthrough](https://github.com/user-attachments/assets/928e7af6-69b4-4abe-96a8-c1052b1dc6ca)]**
 
 ---
 
