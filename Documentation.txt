@@ -1,0 +1,89 @@
+🌍 Climate Pulse Project — Documentation
+1. 📁 Project Initialization
+Open a new RStudio project.
+
+Create the following folders:
+
+scripts/ — for all R scripts.
+
+data/ — for datasets and processed files.
+
+2. 📦 Package Installation
+Install all required packages using:
+
+r
+install.packages(c(
+  "tidyverse", "lubridate", "ggplot2", "plotly", "shiny",
+  "shinydashboard", "DT", "rmarkdown", "knitr", "hockeystick"
+))
+3. 🧪 Data Preparation — scripts/data_load.R
+This script loads and prepares climate datasets from the hockeystick package.
+
+What It Does:
+Loads cached .rds files from your local hockeystick cache.
+
+Renames columns for consistency (year, co2_ppm, temp_anomaly).
+
+Merges CO₂ and temperature datasets into a tidy dataframe.
+
+Saves the result as climate_co2_temp.csv in the data/ folder.
+
+Sample Code:
+r
+library(tidyverse)
+
+# Define cache path
+cache_dir <- file.path(Sys.getenv("LOCALAPPDATA"), "R", "cache", "R", "hockeystick")
+
+# Load datasets
+co2 <- readRDS(file.path(cache_dir, "maunaloa.rds"))
+temp <- readRDS(file.path(cache_dir, "gisstemp.rds"))
+
+# Clean and align
+co2 <- co2 %>% rename(co2_ppm = average) %>% select(year, month, date, co2_ppm)
+temp <- temp %>% rename(temp_anomaly = `J-D`) %>% mutate(year = lubridate::year(Year)) %>% select(year, temp_anomaly)
+
+# Merge and export
+climate <- inner_join(co2, temp, by = "year")
+dir.create("data", showWarnings = FALSE)
+write_csv(climate, "data/climate_co2_temp.csv")
+4. 📊 Data Visualization — scripts/visualize_trends.R
+This script creates visualizations from the merged dataset:
+
+Line plot: CO₂ concentration over time.
+
+Line plot: Temperature anomalies over time.
+
+Scatter plot: Correlation between CO₂ and temperature anomalies.
+
+5. 📥 External Dataset
+Download the global dataset manually:
+
+File: owid-co2-data.xlsx
+
+Source: Our World in Data GitHub
+
+Save it in the data/ folder.
+
+6. 📈 Additional Plots
+Use owid-co2-data.xlsx to create complementary plots in visualize_trends.R, such as:
+
+Global CO₂ emissions
+
+CO₂ per capita
+
+Share of global emissions
+
+7. 🖥️ Dashboard Creation — scripts/app.R
+Build an interactive Shiny dashboard with three tabs:
+
+CO₂ Trends
+
+Temperature Trends
+
+Correlation Plot
+
+Each tab displays a dynamic plot using ggplot2.
+
+8. ✅ Final Result
+Dashboard created successfully and ready to be deployed or shared via GitHub.
